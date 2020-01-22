@@ -1,51 +1,75 @@
 #!/bin/bash
 
 if [[ "$FRONTEND" == "" ]]; then
-	echo "Please tell your frontend host (or IP:PORT) with -e FRONTEND. e.g. http://demo.syzoj.org"
-	exit 1
+    echo "Please tell your frontend host (or IP:PORT) with -e FRONTEND. e.g. http://demo.syzoj.org"
+    echo "This host should be proxy_pass-ed to container:2001."
+    exit 1
 fi
 
 if [[ "$BACKEND" == "" ]]; then
-	echo "Please tell your backend host (or IP:PORT) with -e BACKEND. e.g. http://demo.syzoj.org"
-	exit 1
+    echo "Please tell your backend host (or IP:PORT) with -e BACKEND. e.g. http://demo.syzoj.org"
+    echo "This host should be proxy_pass-ed to container:2002."
+    exit 1
+fi
+
+if [[ "$MINIO_ENDPOINT" == "" || "$MINIO_PORT" == "" || "$MINIO_SSL" == "" ]]; then
+    echo "Please tell your MinIO host (or IP:PORT) with -e MINIO_ENDPOINT and -e MINIO_PORT."
+    echo "The MINIO_ENDPOINT:MINIO_PORT should be proxy_pass-ed to container:2003."
+    echo "MINIO_SSL is true means the MinIO endpoint is a HTTPS host, false means HTTP."
+    exit 1
 fi
 
 if [[ "$SITE_NAME" == "" ]]; then
-	echo "Please tell your site name with -e SITE_NAME. e.g. Demo"
-	exit 1
+    echo "Please tell your site name with -e SITE_NAME. e.g. Demo"
+    exit 1
 fi
 
 if [[ "$ADMIN_USERNAME" == "" ]]; then
-	echo "Please tell your admin username with -e ADMIN_USERNAME."
-	exit 1
+    echo "Please tell your admin username with -e ADMIN_USERNAME."
+    exit 1
 fi
 
 if [[ "$ADMIN_EMAIL" == "" ]]; then
-	echo "Please tell your admin email with -e ADMIN_EMAIL."
-	exit 1
+    echo "Please tell your admin email with -e ADMIN_EMAIL."
+    exit 1
 fi
 
 if [[ "$ADMIN_PASSWORD" == "" ]]; then
-	echo "Please tell your admin password with -e ADMIN_PASSWORD."
-	exit 1
+    echo "Please tell your admin password with -e ADMIN_PASSWORD."
+    exit 1
 fi
+
+if [[ "$MINIO_ACCESS_KEY" == "" ]]; then
+    echo "Please tell your MinIO access key with -e MINIO_ACCESS_KEY."
+    exit
+fi
+
+if [[ "$MINIO_SECRET_KEY" == "" ]]; then
+    echo "Please tell your MinIO secret key with -e MINIO_SECRET_KEY."
+    exit
+fi
+
+# Start MinIO
+cd
+./minio server ./minio-data --address :2003 &
+while ! ./mc config host add minio http://127.0.0.1:2003 "$MINIO_ACCESS_KEY" "$MINIO_SECRET_KEY"; do sleep 1; done
+while ! ./mc mb -p minio/syzoj-ng-files; do sleep 1; done
 
 # Start MySQL
 mysqld_safe &
 while ! mysqladmin ping --silent; do
-	sleep 1
+    sleep 1
 done
 
 # Determine whether to enable cross origin or not
 CROSS_ORIGIN="true"
 if [[ "$FRONTEND" == "$BACKEND" ]]; then
-	CROSS_ORIGIN="false"
+    CROSS_ORIGIN="false"
 fi
 
 # Update
 cd ~/syzoj-ng
-git pull
-yarn
+(git pull | grep "Already up to date.") || yarn
 
 # Make config
 cat > config.json <<EOF
@@ -62,6 +86,14 @@ cat > config.json <<EOF
         "password": "syzoj-ng",
         "database": "syzoj-ng"
     },
+    "fileStorage": {
+        "endPoint": "$MINIO_ENDPOINT",
+        "port": $MINIO_PORT,
+        "useSSL": $MINIO_SSL,
+        "accessKey": "$MINIO_ACCESS_KEY",
+        "secretKey": "$MINIO_SECRET_KEY",
+        "bucket": "syzoj-ng-files"
+    },
     "security": {
         "crossOrigin": {
             "enabled": true,
@@ -69,7 +101,7 @@ cat > config.json <<EOF
                 "$FRONTEND"
             ]
         },
-	"sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+    "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
     },
     "preference": {
         "allowUserChangeUsername": true
@@ -94,8 +126,7 @@ SYZOJ_NG_CONFIG_FILE=./config.json yarn start &
 
 # Update
 cd ~/syzoj-ng-app
-git pull
-yarn
+(git pull | grep "Already up to date.") || yarn
 
 # Make config
 cat > config.json <<EOF
@@ -106,6 +137,10 @@ cat > config.json <<EOF
 }
 EOF
 
-# Build and start
-SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn build
-serve -s build -l tcp://0.0.0.0:2001
+# Start
+if [[ "$ENV" == "production" ]]; then
+	SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn build
+	serve -s build -l tcp://0.0.0.0:2001
+else
+	SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn start
+fi

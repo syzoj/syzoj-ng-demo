@@ -1,5 +1,6 @@
 FROM ubuntu:bionic
 
+SHELL ["/bin/bash", "-c"]
 RUN \
     # Configure APT
     sed -i 's#archive.ubuntu.com#mirrors.tuna.tsinghua.edu.cn#g' /etc/apt/sources.list && \
@@ -15,16 +16,29 @@ RUN \
     # Install packages
     apt-get update && \
     apt-get install -y mariadb-server nodejs yarn && \
-    yarn global add serve && \
-    bash -c "mysqld_safe &" && \
+    yarn global add serve
+RUN \
+    # Download MinIO
+    cd && \
+    ([[ $(uname -m) == "aarch64" ]] && curl https://dl.min.io/server/minio/release/linux-arm64/minio -o minio || true) && \
+    ([[ $(uname -m) == "x86_64" ]] && curl https://dl.min.io/server/minio/release/linux-amd64/minio -o minio || true) && \
+    ([[ $(uname -m) == "aarch64" ]] && curl https://dl.min.io/client/mc/release/linux-arm64/mc -o mc || true) && \
+    ([[ $(uname -m) == "x86_64" ]] && curl https://dl.min.io/client/mc/release/linux-amd64/mc -o mc || true) && \
+    chmod +x minio mc && \
+    mkdir minio-data
+RUN \
     # Download code
     cd && \
     git clone https://github.com/syzoj/syzoj-ng && \
     git clone https://github.com/syzoj/syzoj-ng-app && \
     git clone https://github.com/syzoj/syzoj-ng-demo && \
+    # Install NPM packages
+    cd ~/syzoj-ng && yarn && \
+    cd ~/syzoj-ng-app && yarn && \
     # Create database
-    cd syzoj-ng-demo && \
-	while ! mysqladmin ping --silent; do sleep 1; done && \
+    cd ~/syzoj-ng-demo && \
+    bash -c "mysqld_safe &" && \
+    while ! mysqladmin ping --silent; do sleep 1; done && \
     echo 'CREATE DATABASE `syzoj-ng` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON `syzoj-ng`.* TO "syzoj-ng"@"localhost" IDENTIFIED BY "syzoj-ng";' | mysql && \
     mysql syzoj-ng < demo.sql
 
