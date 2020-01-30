@@ -209,7 +209,7 @@ CREATE TABLE `problem_judge_info` (
 
 LOCK TABLES `problem_judge_info` WRITE;
 /*!40000 ALTER TABLE `problem_judge_info` DISABLE KEYS */;
-INSERT INTO `problem_judge_info` VALUES (1,'{\"defaultTimeLimit\":1000,\"defaultMemoryLimit\":512,\"runSamples\":true,\"fileIo\":null,\"testdata\":null}');
+INSERT INTO `problem_judge_info` VALUES (1,'{\"timeLimit\":1000,\"memoryLimit\":512,\"runSamples\":true,\"subtasks\":[]}');
 /*!40000 ALTER TABLE `problem_judge_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
