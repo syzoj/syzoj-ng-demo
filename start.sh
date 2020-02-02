@@ -121,7 +121,7 @@ HASHED_PASSWORD=$(mkfifo /tmp/admin-password; echo -n "$ADMIN_PASSWORD" > /tmp/a
 mysql <<EOF
 USE syzoj-ng;
 UPDATE user SET username = '$ADMIN_USERNAME' WHERE id = 1;
-UPDATE user SET email = '$ADMIN_USERNAME' WHERE id = 1;
+UPDATE user SET email = '$ADMIN_EMAIL' WHERE id = 1;
 UPDATE user_auth SET password = '$HASHED_PASSWORD' WHERE userId = 1;
 EOF
 
