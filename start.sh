@@ -107,7 +107,9 @@ cat > config.json <<EOF
         "allowUserChangeUsername": true
     },
     "queryLimit": {
-        "problemSetProblemsTake": 100
+        "problemSetProblemsTake": 100,
+        "searchUserTake": 10,
+        "searchGroupTake": 10
     }
 }
 EOF
