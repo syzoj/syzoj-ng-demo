@@ -104,7 +104,9 @@ cat > config.json <<EOF
     "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
     },
     "preference": {
-        "allowUserChangeUsername": true
+        "allowUserChangeUsername": true,
+        "allowOwnerManageProblemPermission": true,
+        "allowOwnerDeleteProblem": true
     },
     "queryLimit": {
         "problemSetProblemsTake": 100,
