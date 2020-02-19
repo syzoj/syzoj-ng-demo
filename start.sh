@@ -61,6 +61,12 @@ while ! mysqladmin ping --silent; do
     sleep 1
 done
 
+# Start Redis
+redis-server --protected-mode no &
+while ! redis-cli ping | grep PONG; do
+    sleep 1
+done
+
 # Determine whether to enable cross origin or not
 CROSS_ORIGIN="true"
 if [[ "$FRONTEND" == "$BACKEND" ]]; then
@@ -78,21 +84,24 @@ cat > config.json <<EOF
         "hostname": "0.0.0.0",
         "port": 2002
     },
-    "database": {
-        "type": "mariadb",
-        "host": "127.0.0.1",
-        "port": 3306,
-        "username": "syzoj-ng",
-        "password": "syzoj-ng",
-        "database": "syzoj-ng"
-    },
-    "fileStorage": {
-        "endPoint": "$MINIO_ENDPOINT",
-        "port": $MINIO_PORT,
-        "useSSL": $MINIO_SSL,
-        "accessKey": "$MINIO_ACCESS_KEY",
-        "secretKey": "$MINIO_SECRET_KEY",
-        "bucket": "syzoj-ng-files"
+    "services": {
+        "database": {
+            "type": "mariadb",
+            "host": "127.0.0.1",
+            "port": 3306,
+            "username": "syzoj-ng",
+            "password": "syzoj-ng",
+            "database": "syzoj-ng"
+        },
+        "minio": {
+			"endPoint": "$MINIO_ENDPOINT",
+			"port": $MINIO_PORT,
+			"useSSL": $MINIO_SSL,
+			"accessKey": "$MINIO_ACCESS_KEY",
+			"secretKey": "$MINIO_SECRET_KEY",
+            "bucket": "syzoj-ng-files"
+        },
+        "redis": "redis://127.0.0.1:6379"
     },
     "security": {
         "crossOrigin": {
@@ -101,7 +110,7 @@ cat > config.json <<EOF
                 "$FRONTEND"
             ]
         },
-    "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+        "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
     },
     "preference": {
         "allowUserChangeUsername": true,
@@ -110,6 +119,7 @@ cat > config.json <<EOF
     },
     "queryLimit": {
         "problemSetProblemsTake": 100,
+        "submissionsTake": 10,
         "searchUserTake": 10,
         "searchGroupTake": 10
     }
@@ -136,7 +146,7 @@ cd ~/syzoj-ng-app
 cat > config.json <<EOF
 {
     "siteName": "$SITE_NAME",
-    "apiEndpoint": "$BACKEND/api",
+    "apiEndpoint": "$BACKEND",
     "crossOrigin": $CROSS_ORIGIN
 }
 EOF

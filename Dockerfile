@@ -6,16 +6,17 @@ RUN \
     sed -i 's#archive.ubuntu.com#mirrors.tuna.tsinghua.edu.cn#g' /etc/apt/sources.list && \
     sed -i 's#ports.ubuntu.com#mirrors.tuna.tsinghua.edu.cn#g' /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y curl git vim build-essential && \
+    apt-get install -y curl git vim build-essential software-properties-common && \
     echo "deb [arch=amd64,arm64,ppc64el] http://mirrors.tuna.tsinghua.edu.cn/mariadb/repo/10.4/ubuntu bionic main" > /etc/apt/sources.list.d/mariadb.list && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     echo "deb https://deb.nodesource.com/node_13.x bionic main" > /etc/apt/sources.list.d/nodesource.list && \
     curl -sSL 'http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF1656F24C74CD1D8' | apt-key add && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    add-apt-repository ppa:chris-lea/redis-server && \
     # Install packages
     apt-get update && \
-    apt-get install -y mariadb-server nodejs yarn && \
+    apt-get install -y mariadb-server nodejs yarn redis && \
     yarn global add serve
 RUN \
     # Download MinIO
