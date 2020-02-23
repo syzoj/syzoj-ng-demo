@@ -114,7 +114,8 @@ cat > config.json <<EOF
     },
     "preference": {
         "allowUserChangeUsername": true,
-        "allowOwnerManageProblemPermission": true,
+        "allowEveryoneCreateProblem": true,
+        "allowOwnerManageProblemPermission": false,
         "allowOwnerDeleteProblem": true
     },
     "queryLimit": {
