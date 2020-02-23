@@ -120,6 +120,7 @@ cat > config.json <<EOF
     "queryLimit": {
         "problemSetProblemsTake": 100,
         "submissionsTake": 10,
+        "submissionStatisticsTake": 10,
         "searchUserTake": 10,
         "searchGroupTake": 10
     }
