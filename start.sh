@@ -110,7 +110,8 @@ cat > config.json <<EOF
                 "$FRONTEND"
             ]
         },
-        "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+        "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))",
+        "maintainceKey": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
     },
     "preference": {
         "allowUserChangeUsername": true,
