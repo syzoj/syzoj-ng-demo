@@ -118,6 +118,12 @@ cat > config.json <<EOF
         "allowOwnerManageProblemPermission": false,
         "allowOwnerDeleteProblem": true
     },
+    "resourceLimit": {
+        "problemTestdataFiles": 40,
+        "problemTestdataSize": 134217728,
+        "problemAdditionalFileFiles": 40,
+        "problemAdditionalFileSize": 134217728
+    },
     "queryLimit": {
         "problemSetProblemsTake": 100,
         "submissionsTake": 10,
