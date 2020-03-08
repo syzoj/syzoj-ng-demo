@@ -162,7 +162,7 @@ EOF
 
 # Start
 if [[ "$ENV" == "production" ]]; then
-	SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn build
+	SYZOJ_NG_APP_CONFIG_FILE=./config.json GENERATE_SOURCEMAP=false yarn build
 	serve -s build -l tcp://0.0.0.0:2001
 else
 	SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn start
