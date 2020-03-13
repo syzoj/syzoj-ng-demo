@@ -130,8 +130,10 @@ cat > config.json <<EOF
         "submissionsTake": 10,
         "submissionStatisticsTake": 10,
         "searchUserTake": 10,
-        "searchGroupTake": 10
+        "searchGroupTake": 10,
+        "userListUsersTake": 100
     }
+
 }
 EOF
 
