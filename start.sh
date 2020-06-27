@@ -78,66 +78,54 @@ cd ~/syzoj-ng
 (git pull | grep "Already up to date.") || yarn
 
 # Make config
-cat > config.json <<EOF
-{
-    "server": {
-        "hostname": "0.0.0.0",
-        "port": 2002
-    },
-    "services": {
-        "database": {
-            "type": "mariadb",
-            "host": "127.0.0.1",
-            "port": 3306,
-            "username": "syzoj-ng",
-            "password": "syzoj-ng",
-            "database": "syzoj-ng"
-        },
-        "minio": {
-			"endPoint": "$MINIO_ENDPOINT",
-			"port": $MINIO_PORT,
-			"useSSL": $MINIO_SSL,
-			"accessKey": "$MINIO_ACCESS_KEY",
-			"secretKey": "$MINIO_SECRET_KEY",
-            "bucket": "syzoj-ng-files"
-        },
-        "redis": "redis://127.0.0.1:6379"
-    },
-    "security": {
-        "crossOrigin": {
-            "enabled": true,
-            "whiteList": [
-                "$FRONTEND"
-            ]
-        },
-        "sessionSecret": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))",
-        "maintainceKey": "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
-    },
-    "preference": {
-        "allowUserChangeUsername": true,
-        "allowEveryoneCreateProblem": true,
-        "allowOwnerManageProblemPermission": false,
-        "allowOwnerDeleteProblem": true
-    },
-    "resourceLimit": {
-        "problemTestdataFiles": 40,
-        "problemTestdataSize": 134217728,
-        "problemAdditionalFileFiles": 40,
-        "problemAdditionalFileSize": 134217728,
-        "problemTestcases": 20,
-        "problemTimeLimit": 2000,
-        "problemMemoryLimit": 512
-    },
-    "queryLimit": {
-        "problemSetProblemsTake": 100,
-        "submissionsTake": 10,
-        "submissionStatisticsTake": 10,
-        "searchUserTake": 10,
-        "searchGroupTake": 10,
-        "userListUsersTake": 100
-    }
-
-}
+cat > config.yaml <<EOF
+server:
+  hostname: 0.0.0.0
+  port: 2002
+services:
+  database:
+    type: mariadb
+    host: 127.0.0.1
+    port: 3306
+    username: syzoj-ng
+    password: syzoj-ng
+    database: syzoj-ng
+  minio:
+    endPoint: $MINIO_ENDPOINT
+    port: $MINIO_PORT
+    useSSL: $MINIO_SSL
+    accessKey: $MINIO_ACCESS_KEY
+    secretKey: $MINIO_SECRET_KEY
+    bucket: syzoj-ng-files
+  redis: redis://127.0.0.1:6379
+security:
+  crossOrigin:
+    enabled: true
+    whiteList:
+      - $FRONTEND
+  sessionSecret: $(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))
+  maintainceKey: $(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))
+preference:
+  allowUserChangeUsername: true
+  allowEveryoneCreateProblem: true
+  allowNonAdminEditPublicProblem: true
+  allowOwnerManageProblemPermission: false
+  allowOwnerDeleteProblem: true
+resourceLimit:
+  problemTestdataFiles: 40
+  problemTestdataSize: 134217728
+  problemAdditionalFileFiles: 40
+  problemAdditionalFileSize: 134217728
+  problemTestcases: 20
+  problemTimeLimit: 2000
+  problemMemoryLimit: 512
+queryLimit:
+  problemSetProblemsTake: 100
+  submissionsTake: 10
+  submissionStatisticsTake: 10
+  searchUserTake: 10
+  searchGroupTake: 10
+  userListUsersTake: 100
 EOF
 
 # Setup admin user
@@ -150,25 +138,23 @@ UPDATE user_auth SET password = '$HASHED_PASSWORD' WHERE userId = 1;
 EOF
 
 # Start
-SYZOJ_NG_CONFIG_FILE=./config.json yarn start &
+SYZOJ_NG_CONFIG_FILE=./config.yaml yarn start &
 
 # Update
 cd ~/syzoj-ng-app
 (git pull | grep "Already up to date.") || yarn
 
 # Make config
-cat > config.json <<EOF
-{
-    "siteName": "$SITE_NAME",
-    "apiEndpoint": "$BACKEND",
-    "crossOrigin": $CROSS_ORIGIN
-}
+cat > config.yaml <<EOF
+siteName: $SITE_NAME
+apiEndpoint: $BACKEND
+crossOrigin: $CROSS_ORIGIN
 EOF
 
 # Start
 if [[ "$ENV" == "production" ]]; then
-	SYZOJ_NG_APP_CONFIG_FILE=./config.json GENERATE_SOURCEMAP=false yarn build
+	SYZOJ_NG_APP_CONFIG_FILE=./config.yaml GENERATE_SOURCEMAP=false yarn build
 	serve -s build -l tcp://0.0.0.0:2001
 else
-	SYZOJ_NG_APP_CONFIG_FILE=./config.json yarn start
+	SYZOJ_NG_APP_CONFIG_FILE=./config.yaml yarn start
 fi
