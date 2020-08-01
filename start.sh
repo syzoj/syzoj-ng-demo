@@ -77,6 +77,12 @@ fi
 cd ~/syzoj-ng
 (git pull | grep "Already up to date.") || yarn
 
+if [ $MAIL_TRANSPORT = "" ]; then
+	MAIL_ENABLED="false"
+else
+	MAIL_ENABLED="true"
+fi
+
 # Make config
 cat > config.yaml <<EOF
 server:
@@ -91,21 +97,26 @@ services:
     password: syzoj-ng
     database: syzoj-ng
   minio:
-    endPoint: $MINIO_ENDPOINT
+    endPoint: "$MINIO_ENDPOINT"
     port: $MINIO_PORT
     useSSL: $MINIO_SSL
-    accessKey: $MINIO_ACCESS_KEY
-    secretKey: $MINIO_SECRET_KEY
+    accessKey: "$MINIO_ACCESS_KEY"
+    secretKey: "$MINIO_SECRET_KEY"
     bucket: syzoj-ng-files
   redis: redis://127.0.0.1:6379
+  mail:
+    address: "$MAIL_ADDRESS"
+    transport: "$MAIL_TRANSPORT"
 security:
   crossOrigin:
     enabled: true
     whiteList:
-      - $FRONTEND
-  sessionSecret: $(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))
-  maintainceKey: $(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))
+      - "$FRONTEND"
+  sessionSecret: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+  maintainceKey: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
 preference:
+  siteName: "$SITE_NAME"
+  requireEmailVerification: $MAIL_ENABLED
   allowUserChangeUsername: true
   allowEveryoneCreateProblem: true
   allowNonAdminEditPublicProblem: true
@@ -146,8 +157,8 @@ cd ~/syzoj-ng-app
 
 # Make config
 cat > config.yaml <<EOF
-siteName: $SITE_NAME
-apiEndpoint: $BACKEND
+siteName: "$SITE_NAME"
+apiEndpoint: "$BACKEND"
 crossOrigin: $CROSS_ORIGIN
 EOF
 
