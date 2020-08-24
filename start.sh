@@ -88,6 +88,7 @@ cat > config.yaml <<EOF
 server:
   hostname: 0.0.0.0
   port: 2002
+  trustProxy: loopback
 services:
   database:
     type: mariadb
@@ -137,6 +138,8 @@ queryLimit:
   searchUserTake: 10
   searchGroupTake: 10
   userListUsersTake: 100
+vendor:
+  ip2region: /opt/ip2region/ip2region.db
 EOF
 
 # Setup admin user
