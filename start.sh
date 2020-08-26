@@ -88,7 +88,7 @@ cat > config.yaml <<EOF
 server:
   hostname: 0.0.0.0
   port: 2002
-  trustProxy: loopback
+  trustProxy: ["loopback", "linklocal", "uniquelocal"]
 services:
   database:
     type: mariadb
