@@ -75,7 +75,10 @@ fi
 
 # Update
 cd ~/syzoj-ng
-(git pull | grep "Already up to date.") || yarn
+if [[ "$(git fetch | wc -l)" != "0" ]]; then
+	git reset --hard origin/master
+	yarn
+fi
 
 if [ $MAIL_TRANSPORT = "" ]; then
 	MAIL_ENABLED="false"
@@ -157,7 +160,10 @@ SYZOJ_NG_CONFIG_FILE=./config.yaml yarn start &
 
 # Update
 cd ~/syzoj-ng-app
-(git pull | grep "Already up to date.") || yarn
+if [[ "$(git fetch | wc -l)" != "0" ]]; then
+	git reset --hard origin/master
+	yarn
+fi
 
 # Make config
 cat > config.yaml <<EOF
