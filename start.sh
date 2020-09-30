@@ -119,12 +119,20 @@ security:
   maintainceKey: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
 preference:
   siteName: "$SITE_NAME"
-  requireEmailVerification: $MAIL_ENABLED
-  allowUserChangeUsername: true
-  allowEveryoneCreateProblem: true
-  allowNonAdminEditPublicProblem: true
-  allowOwnerManageProblemPermission: false
-  allowOwnerDeleteProblem: true
+  security:
+    requireEmailVerification: $MAIL_ENABLED
+    allowUserChangeUsername: true
+    allowEveryoneCreateProblem: true
+    allowNonAdminEditPublicProblem: true
+    allowOwnerManageProblemPermission: false
+    allowOwnerDeleteProblem: true
+  pagination:
+    problemSet: 50
+    searchProblemsPreview: 7
+    submissions: 10
+    submissionStatistics: 10
+    userList: 30
+    userAuditLogs: 10
 resourceLimit:
   problemTestdataFiles: 40
   problemTestdataSize: 134217728
@@ -135,13 +143,13 @@ resourceLimit:
   problemMemoryLimit: 512
   submissionFileSize: 10485760
 queryLimit:
-  problemSetProblemsTake: 100
-  submissionsTake: 10
-  submissionStatisticsTake: 10
-  searchUserTake: 10
-  searchGroupTake: 10
-  userListUsersTake: 100
-  userAuditLogsTake: 20
+  problemSet: 100
+  submissions: 10
+  submissionStatistics: 10
+  searchUser: 10
+  searchGroup: 10
+  userList: 100
+  userAuditLogs: 20
 vendor:
   ip2region: /opt/ip2region/ip2region.db
 EOF
@@ -164,17 +172,10 @@ git fetch
 git reset --hard origin/master
 yarn
 
-# Make config
-cat > config.yaml <<EOF
-siteName: "$SITE_NAME"
-apiEndpoint: "$BACKEND"
-crossOrigin: $CROSS_ORIGIN
-EOF
-
 # Start
 if [[ "$ENV" == "production" ]]; then
-	SYZOJ_NG_APP_CONFIG_FILE=./config.yaml GENERATE_SOURCEMAP=false yarn build
+	yarn build
 	serve -s build -l tcp://0.0.0.0:2001
 else
-	SYZOJ_NG_APP_CONFIG_FILE=./config.yaml yarn start
+	yarn start
 fi
