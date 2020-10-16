@@ -126,6 +126,9 @@ preference:
     allowNonAdminEditPublicProblem: true
     allowOwnerManageProblemPermission: false
     allowOwnerDeleteProblem: true
+    allowEveryoneCreateDiscussion: true
+    discussionDefaultPublic: true
+    discussionReplyDefaultPublic: true
   pagination:
     problemSet: 50
     searchProblemsPreview: 7
@@ -133,6 +136,14 @@ preference:
     submissionStatistics: 10
     userList: 30
     userAuditLogs: 10
+    discussions: 10
+    searchDiscussionsPreview: 7
+    discussionReplies: 40
+    discussionRepliesHead: 20
+    discussionRepliesMore: 20
+  misc:
+    discussionReactionEmojis: [👍, 👎, 😄, 😕, ❤️, 🤔, 🤣, 🌿, 🍋, 🕊️]
+    discussionReactionAllowCustomEmojis: true
 resourceLimit:
   problemTestdataFiles: 40
   problemTestdataSize: 134217728
@@ -150,6 +161,8 @@ queryLimit:
   searchGroup: 10
   userList: 100
   userAuditLogs: 20
+  discussions: 20
+  discussionReplies: 50
 vendor:
   ip2region: /opt/ip2region/ip2region.db
 EOF
