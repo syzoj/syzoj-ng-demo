@@ -85,6 +85,14 @@ else
 	MAIL_ENABLED="true"
 fi
 
+if [ $TELEGRAM_BOT_TOKEN = "" ]; then
+	TELEGRAM_BOT_TOKEN="null"
+fi
+
+if [ $TELEGRAM_SEND_TO = "" ]; then
+	TELEGRAM_SEND_TO="null"
+fi
+
 # Make config
 cat > config.yaml <<EOF
 server:
@@ -144,6 +152,8 @@ preference:
   misc:
     discussionReactionEmojis: [👍, 👎, 😄, 😕, ❤️, 🤔, 🤣, 🌿, 🍋, 🕊️]
     discussionReactionAllowCustomEmojis: true
+  serverSideOnly:
+    discussionReactionCustomEmojisBlacklist: /(\uD83C[\uDDE6-\uDDFF]){2}/
 resourceLimit:
   problemTestdataFiles: 40
   problemTestdataSize: 134217728
@@ -163,6 +173,11 @@ queryLimit:
   userAuditLogs: 20
   discussions: 20
   discussionReplies: 50
+errorReporting:
+  telegramBotToken: $TELEGRAM_BOT_TOKEN
+  telegramApiRoot: null
+  sentTo: $TELEGRAM_SEND_TO
+  proxyUrl: null
 vendor:
   ip2region: /opt/ip2region/ip2region.db
 EOF
