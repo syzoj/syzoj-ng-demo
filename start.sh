@@ -135,6 +135,7 @@ preference:
     allowOwnerManageProblemPermission: false
     allowOwnerDeleteProblem: true
     allowEveryoneCreateDiscussion: true
+    renderMarkdownInUserBio: false
     discussionDefaultPublic: true
     discussionReplyDefaultPublic: true
   pagination:
