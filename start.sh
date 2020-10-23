@@ -135,7 +135,6 @@ preference:
     allowOwnerManageProblemPermission: false
     allowOwnerDeleteProblem: true
     allowEveryoneCreateDiscussion: true
-    renderMarkdownInUserBio: false
     discussionDefaultPublic: true
     discussionReplyDefaultPublic: true
   pagination:
@@ -151,6 +150,7 @@ preference:
     discussionRepliesHead: 20
     discussionRepliesMore: 20
   misc:
+    renderMarkdownInUserBio: false
     discussionReactionEmojis: [👍, 👎, 😄, 😕, ❤️, 🤔, 🤣, 🌿, 🍋, 🕊️]
     discussionReactionAllowCustomEmojis: true
   serverSideOnly:
