@@ -123,7 +123,7 @@ security:
     enabled: true
     whiteList:
       - "$FRONTEND"
-  sessionSecret: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+  sessionSecret: "$MINIO_SECRET_KEY"
   maintainceKey: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
 preference:
   siteName: "$SITE_NAME"
