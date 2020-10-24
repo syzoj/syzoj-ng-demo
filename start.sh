@@ -131,7 +131,7 @@ preference:
     requireEmailVerification: $MAIL_ENABLED
     allowUserChangeUsername: true
     allowEveryoneCreateProblem: true
-    allowNonAdminEditPublicProblem: true
+    allowNonPrivilegedUserEditPublicProblem: true
     allowOwnerManageProblemPermission: false
     allowOwnerDeleteProblem: true
     allowEveryoneCreateDiscussion: true
