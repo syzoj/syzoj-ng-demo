@@ -12,9 +12,9 @@ if [[ "$BACKEND" == "" ]]; then
     exit 1
 fi
 
-if [[ "$MINIO_ENDPOINT" == "" ]]; then
-    echo "Please tell your MinIO endpoint with -e MINIO_ENDPOINT"
-    echo "The MINIO_ENDPOINT should be proxy_pass-ed to http://container:2003."
+if [[ "$MINIO_ENDPOINT_USER" == "" || "$MINIO_ENDPOINT_JUDGE" == "" ]]; then
+    echo "Please tell your MinIO endpoint for user and judge with -e MINIO_ENDPOINT_USER and -e MINIO_ENDPOINT_JUDGE"
+    echo "The hosts should be proxy_pass-ed to http://container:2003 and the HTTP Host header should be '127.0.0.1:2003'."
     exit 1
 fi
 
@@ -107,9 +107,9 @@ services:
     password: syzoj-ng
     database: syzoj-ng
   minio:
-    endpoint: "$MINIO_ENDPOINT"
-    endpointForUser: "${MINIO_ENDPOINT_USER:=null}"
-    endpointForJudge: "${MINIO_ENDPOINT_JUDGE:=null}"
+    endpoint: http://127.0.0.1:2003
+    endpointForUser: "$MINIO_ENDPOINT_USER"
+    endpointForJudge: "$MINIO_ENDPOINT_JUDGE"
     accessKey: "$MINIO_ACCESS_KEY"
     secretKey: "$MINIO_SECRET_KEY"
     bucket: syzoj-ng-files
