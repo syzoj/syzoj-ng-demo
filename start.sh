@@ -12,10 +12,9 @@ if [[ "$BACKEND" == "" ]]; then
     exit 1
 fi
 
-if [[ "$MINIO_ENDPOINT" == "" || "$MINIO_PORT" == "" || "$MINIO_SSL" == "" ]]; then
-    echo "Please tell your MinIO host (or IP:PORT) with -e MINIO_ENDPOINT and -e MINIO_PORT."
-    echo "The MINIO_ENDPOINT:MINIO_PORT should be proxy_pass-ed to container:2003."
-    echo "MINIO_SSL is true means the MinIO endpoint is a HTTPS host, false means HTTP."
+if [[ "$MINIO_ENDPOINT" == "" ]]; then
+    echo "Please tell your MinIO endpoint with -e MINIO_ENDPOINT"
+    echo "The MINIO_ENDPOINT should be proxy_pass-ed to http://container:2003."
     exit 1
 fi
 
@@ -108,9 +107,9 @@ services:
     password: syzoj-ng
     database: syzoj-ng
   minio:
-    endPoint: "$MINIO_ENDPOINT"
-    port: $MINIO_PORT
-    useSSL: $MINIO_SSL
+    endpoint: "$MINIO_ENDPOINT"
+    endpointForUser: "${MINIO_ENDPOINT_USER:=null}"
+    endpointForJudge: "${MINIO_ENDPOINT_JUDGE:=null}"
     accessKey: "$MINIO_ACCESS_KEY"
     secretKey: "$MINIO_SECRET_KEY"
     bucket: syzoj-ng-files
@@ -176,7 +175,14 @@ queryLimit:
   userAuditLogs: 20
   discussions: 20
   discussionReplies: 50
-errorReporting:
+judge:
+  limit:
+    compilerMessage: 524288
+    outputSize: 104857600
+    dataDisplay: 128
+    dataDisplayForSubmitAnswer: 128
+    stderrDisplay: 5120
+eventReport:
   telegramBotToken: $TELEGRAM_BOT_TOKEN
   telegramApiRoot: null
   sentTo: $TELEGRAM_SEND_TO
