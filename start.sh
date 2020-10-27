@@ -183,10 +183,10 @@ judge:
     dataDisplayForSubmitAnswer: 128
     stderrDisplay: 5120
 eventReport:
-  telegramBotToken: $TELEGRAM_BOT_TOKEN
-  telegramApiRoot: null
-  sentTo: $TELEGRAM_SEND_TO
-  proxyUrl: null
+  telegramBotToken: ${TELEGRAM_BOT_TOKEN:=null}
+  telegramApiRoot: ${TELEGRAM_API_ROOT:=null}
+  sentTo: ${TELEGRAM_SEND_TO:=null}
+  proxyUrl: ${TELEGRAM_PROXY_URL:=null}
 vendor:
   ip2region: /opt/ip2region/ip2region.db
 EOF
