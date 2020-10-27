@@ -78,17 +78,17 @@ git fetch
 git reset --hard origin/master
 yarn
 
-if [ $MAIL_TRANSPORT = "" ]; then
+if [ "$MAIL_TRANSPORT" = "" ]; then
 	MAIL_ENABLED="false"
 else
 	MAIL_ENABLED="true"
 fi
 
-if [ $TELEGRAM_BOT_TOKEN = "" ]; then
+if [ "$TELEGRAM_BOT_TOKEN" = "" ]; then
 	TELEGRAM_BOT_TOKEN="null"
 fi
 
-if [ $TELEGRAM_SEND_TO = "" ]; then
+if [ "$TELEGRAM_SEND_TO" = "" ]; then
 	TELEGRAM_SEND_TO="null"
 fi
 
