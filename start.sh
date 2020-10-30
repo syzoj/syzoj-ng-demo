@@ -124,11 +124,14 @@ security:
       - "$FRONTEND"
   sessionSecret: "$MINIO_SECRET_KEY"
   maintainceKey: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
+  recaptchaSecret: ${RECAPTCHA_SECRET:=null}
 preference:
   siteName: "$SITE_NAME"
   frontend:
     redirectLegacyUrls: false
   security:
+    recaptchaEnabled: ${RECAPTCHA_ENABLED:=false}
+    recaptchaKey: ${RECAPTCHA_KEY:=null}
     requireEmailVerification: $MAIL_ENABLED
     allowUserChangeUsername: true
     allowEveryoneCreateProblem: true
