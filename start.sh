@@ -124,11 +124,15 @@ security:
       - "$FRONTEND"
   sessionSecret: "$MINIO_SECRET_KEY"
   maintainceKey: "$(echo $(dd if=/dev/urandom | base64 -w0 | dd bs=1 count=20 2>/dev/null))"
-  recaptchaSecret: ${RECAPTCHA_SECRET:=null}
+  recaptcha:
+    secretKey: ${RECAPTCHA_SECRET:=null}
+    useRecaptchaNet: true
+    proxyUrl: null
 preference:
   siteName: "$SITE_NAME"
   frontend:
     redirectLegacyUrls: false
+    homepageUserListOnMainView: true
   security:
     recaptchaEnabled: ${RECAPTCHA_ENABLED:=false}
     recaptchaKey: ${RECAPTCHA_KEY:=null}
@@ -142,6 +146,8 @@ preference:
     discussionDefaultPublic: true
     discussionReplyDefaultPublic: true
   pagination:
+    homepageUserList: 20
+    homepageProblemList: 5
     problemSet: 50
     searchProblemsPreview: 7
     submissions: 10
@@ -157,6 +163,7 @@ preference:
     renderMarkdownInUserBio: false
     discussionReactionEmojis: [👍, 👎, 😄, 😕, ❤️, 🤔, 🤣, 🌿, 🍋, 🕊️]
     discussionReactionAllowCustomEmojis: true
+    sortUserByRating: false
   serverSideOnly:
     discussionReactionCustomEmojisBlacklist: /(\uD83C[\uDDE6-\uDDFF]){2}/
 resourceLimit:
