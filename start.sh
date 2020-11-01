@@ -6,12 +6,6 @@ if [[ "$FRONTEND" == "" ]]; then
     exit 1
 fi
 
-if [[ "$BACKEND" == "" ]]; then
-    echo "Please tell your backend host (or IP:PORT) with -e BACKEND. e.g. http://demo.syzoj.org"
-    echo "This host should be proxy_pass-ed to container:2002."
-    exit 1
-fi
-
 if [[ "$MINIO_ENDPOINT_USER" == "" || "$MINIO_ENDPOINT_JUDGE" == "" ]]; then
     echo "Please tell your MinIO endpoint for user and judge with -e MINIO_ENDPOINT_USER and -e MINIO_ENDPOINT_JUDGE"
     echo "The hosts should be proxy_pass-ed to http://container:2003 and the HTTP Host header should be '127.0.0.1:2003'."
@@ -65,12 +59,6 @@ redis-server --protected-mode no &
 while ! redis-cli ping | grep PONG; do
     sleep 1
 done
-
-# Determine whether to enable cross origin or not
-CROSS_ORIGIN="true"
-if [[ "$FRONTEND" == "$BACKEND" ]]; then
-    CROSS_ORIGIN="false"
-fi
 
 # Update
 cd ~/syzoj-ng
