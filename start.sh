@@ -118,9 +118,6 @@ security:
     proxyUrl: null
 preference:
   siteName: "$SITE_NAME"
-  frontend:
-    redirectLegacyUrls: false
-    homepageUserListOnMainView: true
   security:
     recaptchaEnabled: ${RECAPTCHA_ENABLED:=false}
     recaptchaKey: ${RECAPTCHA_KEY:=null}
@@ -148,10 +145,12 @@ preference:
     discussionRepliesHead: 20
     discussionRepliesMore: 20
   misc:
+    redirectLegacyUrls: false
+    homepageUserListOnMainView: true
+    sortUserByRating: false
     renderMarkdownInUserBio: false
     discussionReactionEmojis: [👍, 👎, 😄, 😕, ❤️, 🤔, 🤣, 🌿, 🍋, 🕊️]
     discussionReactionAllowCustomEmojis: true
-    sortUserByRating: false
   serverSideOnly:
     discussionReactionCustomEmojisBlacklist: /(\uD83C[\uDDE6-\uDDFF]){2}/
 resourceLimit:
