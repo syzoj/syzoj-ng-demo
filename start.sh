@@ -62,7 +62,7 @@ done
 
 # Update
 cd ~/syzoj-ng
-git fetch
+while ! git fetch; do sleep 1; done
 git reset --hard origin/master
 yarn
 
@@ -202,7 +202,7 @@ SYZOJ_NG_CONFIG_FILE=./config.yaml yarn start &
 
 # Update
 cd ~/syzoj-ng-app
-git fetch
+while ! git fetch; do sleep 1; done
 git reset --hard origin/master
 yarn
 
