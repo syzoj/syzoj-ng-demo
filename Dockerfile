@@ -45,4 +45,4 @@ RUN \
     echo 'CREATE DATABASE `syzoj-ng` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; GRANT ALL PRIVILEGES ON `syzoj-ng`.* TO "syzoj-ng"@"localhost" IDENTIFIED BY "syzoj-ng";' | mysql && \
     mysql syzoj-ng < demo.sql
 
-CMD cd /root/syzoj-ng-demo && git pull && bash start.sh
+CMD cd /root/syzoj-ng-demo && bash -c "while ! git fetch; do sleep 1; done; git reset --hard origin/master" && bash start.sh
