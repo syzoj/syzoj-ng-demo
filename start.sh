@@ -146,6 +146,7 @@ preference:
     discussionRepliesMore: 20
   misc:
     redirectLegacyUrls: false
+    legacyContestsEntryUrl: null
     homepageUserListOnMainView: true
     sortUserByRating: false
     renderMarkdownInUserBio: false
