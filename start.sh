@@ -86,6 +86,7 @@ server:
   hostname: 0.0.0.0
   port: 2002
   trustProxy: ["loopback", "linklocal", "uniquelocal"]
+  clusters: 0
 services:
   database:
     type: mariadb
@@ -116,6 +117,9 @@ security:
     secretKey: ${RECAPTCHA_SECRET:=null}
     useRecaptchaNet: true
     proxyUrl: null
+  rateLimit:
+    maxRequests: 200
+    durationSeconds: 10
 preference:
   siteName: "$SITE_NAME"
   security:
@@ -199,7 +203,7 @@ UPDATE user_auth SET password = '$HASHED_PASSWORD' WHERE userId = 1;
 EOF
 
 # Start
-SYZOJ_NG_CONFIG_FILE=./config.yaml yarn start &
+NODE_ENV=production SYZOJ_NG_CONFIG_FILE=./config.yaml yarn start &
 
 # Update
 cd ~/syzoj-ng-app
@@ -208,9 +212,5 @@ git reset --hard origin/master
 yarn
 
 # Start
-if [[ "$ENV" == "production" ]]; then
-	yarn build
-	serve -s build -l tcp://0.0.0.0:2001
-else
-	yarn start
-fi
+yarn build
+serve -s build -l tcp://0.0.0.0:2001
