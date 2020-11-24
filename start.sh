@@ -149,6 +149,9 @@ preference:
     discussionRepliesHead: 20
     discussionRepliesMore: 20
   misc:
+    appLogo: ${APP_LOGO:=default}
+    googleAnalyticsId: ${GA_ID:=null}
+    gravatarCdn: ${GRAVATAR_CDN:=https://gravatar.loli.net}
     redirectLegacyUrls: false
     legacyContestsEntryUrl: null
     homepageUserListOnMainView: true
