@@ -125,7 +125,7 @@ preference:
   security:
     recaptchaEnabled: ${RECAPTCHA_ENABLED:=false}
     recaptchaKey: ${RECAPTCHA_KEY:=null}
-    requireEmailVerification: $MAIL_ENABLED
+    requireEmailVerification: false
     allowUserChangeUsername: true
     allowEveryoneCreateProblem: true
     allowNonPrivilegedUserEditPublicProblem: true
