@@ -166,6 +166,7 @@ resourceLimit:
   problemTestdataSize: 134217728
   problemAdditionalFileFiles: 40
   problemAdditionalFileSize: 134217728
+  problemSamplesToRun: 10
   problemTestcases: 20
   problemTimeLimit: 2000
   problemMemoryLimit: 512
@@ -193,7 +194,7 @@ eventReport:
   sentTo: ${TELEGRAM_SEND_TO:=null}
   proxyUrl: ${TELEGRAM_PROXY_URL:=null}
 vendor:
-  ip2region: /opt/ip2region/ip2region.db
+  ip2region: null
 EOF
 
 # Setup admin user
