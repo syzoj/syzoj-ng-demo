@@ -150,6 +150,9 @@ preference:
     discussionRepliesMore: 20
   misc:
     appLogo: ${APP_LOGO:=default}
+    appLogoForTheme:
+      pure: original
+      far: inverted
     googleAnalyticsId: ${GA_ID:=null}
     gravatarCdn: ${GRAVATAR_CDN:=https://gravatar.loli.net}
     redirectLegacyUrls: false
@@ -161,6 +164,7 @@ preference:
     discussionReactionAllowCustomEmojis: true
   serverSideOnly:
     discussionReactionCustomEmojisBlacklist: /(\uD83C[\uDDE6-\uDDFF]){2}/
+    dynamicTaskPriority: false
 resourceLimit:
   problemTestdataFiles: 40
   problemTestdataSize: 134217728
